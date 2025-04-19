@@ -1,4 +1,5 @@
 import os
+from cargar_datos import cargar_datos  # Importamos la función desde el nuevo módulo
 
 def simbolo(paso_requerido, paso_actual):
     if paso_actual < paso_requerido:
@@ -8,29 +9,49 @@ def simbolo(paso_requerido, paso_actual):
     else:
         return '✓'
 
-def mostrar_menu(paso, ruta):
-    print("\n=============================")
-    print(" Menú Principal ")
-    print("=============================")
-
-    print(f"[{simbolo(1, paso)}] 1. Cargar datos ({'ningún archivo cargado' if paso <= 1 else f'archivo {os.path.basename(ruta)} cargado'})")
-    print(f"[{simbolo(2, paso)}] 2. Preprocesado de datos {'(requiere carga de datos)' if paso < 2 else '(completado)' if paso >= 3 else '(en progreso)'}")
+def mostrar_menu(paso, ruta=None, tipo_archivo=None):
+    """
+    Muestra el menú principal con el estado de cada opción según el paso actual.
+    """
+    print("\n===================================")
+    print("         Menú Principal           ")
+    print("===================================")
     
-    # Subopciones siempre visibles
-    print(f"\t[{simbolo(2.1, paso)}] 2.1 Selección de columnas ({'pendiente' if paso < 2.2 and paso >= 2.1 else 'completado' if paso > 2.1 else 'requiere carga de datos'})")
-    print(f"\t[{simbolo(2.2, paso)}] 2.2 Manejo de valores faltantes ({'pendiente' if paso == 2.2 else 'completado' if paso > 2.2 else 'requiere selección de columnas'})")
-    print(f"\t[{simbolo(2.3, paso)}] 2.3 Transformación de datos categóricos ({'pendiente' if paso == 2.3 else 'completado' if paso > 2.3 else 'requiere manejo de valores faltantes'})")
-    print(f"\t[{simbolo(2.4, paso)}] 2.4 Normalización y escalado ({'pendiente' if paso == 2.4 else 'completado' if paso > 2.4 else 'requiere transformación categórica'})")
-    print(f"\t[{simbolo(2.5, paso)}] 2.5 Detección y manejo de valores atípicos ({'pendiente' if paso == 2.5 else 'completado' if paso > 2.5 else 'requiere normalización'})")
+    # Estado de carga de datos
+    if paso <= 1:
+        estado_carga = "ningún archivo cargado"
+    else:
+        if tipo_archivo == "CSV":
+            estado_carga = f"archivo: {os.path.basename(ruta)}"
+        elif tipo_archivo == "Excel":
+            estado_carga = f"archivo: {os.path.basename(ruta)}"
+        elif tipo_archivo == "SQLite":
+            partes = ruta.split('|')
+            db_path = partes[0]
+            tabla = partes[1] if len(partes) > 1 else "desconocida"
+            estado_carga = f"tabla: {tabla} de {os.path.basename(db_path)}"
+    
+    print(f"[{simbolo(1, paso)}] 1. Cargar datos ({estado_carga if paso >= 1 else 'ningún archivo cargado'})")
+    print(f"[{simbolo(2, paso)}] 2. Preprocesado de datos {'(requiere carga de datos)' if paso < 2 else '(selección de columnas requerida)' if paso == 2 else '(completado)' if paso >= 3 else ''}")
+    
+    # Mostrar subopciones solo si estamos en o después del paso 2
+    if paso >= 2:
+        print(f"\t[{simbolo(2.1, paso)}] 2.1 Selección de columnas ({'pendiente' if paso < 2.2 and paso >= 2 else 'completado' if paso > 2.1 else 'requiere carga de datos'})")
+        print(f"\t[{simbolo(2.2, paso)}] 2.2 Manejo de valores faltantes ({'pendiente' if paso == 2.2 else 'completado' if paso > 2.2 else 'requiere selección de columnas'})")
+        print(f"\t[{simbolo(2.3, paso)}] 2.3 Transformación de datos categóricos ({'pendiente' if paso == 2.3 else 'completado' if paso > 2.3 else 'requiere manejo de valores faltantes'})")
+        print(f"\t[{simbolo(2.4, paso)}] 2.4 Normalización y escalado ({'pendiente' if paso == 2.4 else 'completado' if paso > 2.4 else 'requiere transformación categórica'})")
+        print(f"\t[{simbolo(2.5, paso)}] 2.5 Detección y manejo de valores atípicos ({'pendiente' if paso == 2.5 else 'completado' if paso > 2.5 else 'requiere normalización'})")
     
     print(f"[{simbolo(3, paso)}] 3. Visualización de datos ({'pendiente' if paso == 3 else 'requiere preprocesado completo' if paso < 3 else 'completado'})")
     print(f"[{simbolo(4, paso)}] 4. Exportar datos ({'pendiente' if paso == 4 else 'requiere visualización de datos' if paso < 4 else 'completado'})")
-    
     print("[✓] 5. Salir")
     
     return input("\nSeleccione una opción: ")
 
 def mostrar_dialogo_salir():
+    """
+    Muestra el diálogo de confirmación para salir de la aplicación.
+    """
     print("\n===================================")
     print("Salir de la Aplicación")
     print("===================================")
@@ -47,29 +68,43 @@ def mostrar_dialogo_salir():
         return False
 
 def main():
+    """
+    Función principal que controla el flujo de la aplicación.
+    """
     paso = 1
     ruta = None
+    tipo_archivo = None
+    datos = None
+    
     while True:
-        opcion = mostrar_menu(paso, ruta)
-        if opcion == "1" and paso <= 1:
-            print("Cargando datos...")
-            ruta = "datos.csv"
-            paso = 2
-        elif opcion == "2.1" and paso == 2:
-            print("Seleccionando columnas...")
-            paso = 2.2
-        elif opcion == "2.2" and paso == 2.2:
-            print("Manejando valores faltantes...")
-            paso = 2.3
-        elif opcion == "2.3" and paso == 2.3:
-            print("Transformando datos categóricos...")
-            paso = 2.4
-        elif opcion == "2.4" and paso == 2.4:
-            print("Normalizando datos...")
-            paso = 2.5
-        elif opcion == "2.5" and paso == 2.5:
-            print("Detectando valores atípicos...")
-            paso = 3
+        opcion = mostrar_menu(paso, ruta, tipo_archivo)
+        
+        if opcion == "1":
+            # Cargar datos usando la función importada del módulo data_loader
+            datos, ruta, tipo_archivo = cargar_datos()
+            if datos is not None:
+                paso = 2
+        elif opcion == "2" and paso >= 2:
+            # Aquí entraría el código de preprocesado
+            print("Iniciando preprocesado de datos...")
+            # Aquí irían más opciones
+        elif opcion.startswith("2.") and paso >= 2:
+            # Opciones de preprocesado
+            if opcion == "2.1" and paso == 2:
+                print("Seleccionando columnas...")
+                paso = 2.2
+            elif opcion == "2.2" and paso == 2.2:
+                print("Manejando valores faltantes...")
+                paso = 2.3
+            elif opcion == "2.3" and paso == 2.3:
+                print("Transformando datos categóricos...")
+                paso = 2.4
+            elif opcion == "2.4" and paso == 2.4:
+                print("Normalizando datos...")
+                paso = 2.5
+            elif opcion == "2.5" and paso == 2.5:
+                print("Detectando valores atípicos...")
+                paso = 3
         elif opcion == "3" and paso == 3:
             print("Visualizando datos...")
             paso = 4
