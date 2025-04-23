@@ -97,7 +97,7 @@ def cargar_excel():
 def cargar_sqlite():
     """Carga datos desde una base de datos SQLite."""
     ruta_db = input("Ingrese la ruta de la base de datos SQLite: ")
-    if not os.path.exists(ruta_db) or not ruta_db.lower().endswith('.sqlite'):
+    if not os.path.exists(ruta_db) or not (ruta_db.lower().endswith('.sqlite') or ruta_db.lower().endswith('.db')):
         print("Error: Archivo no encontrado o no es una base de datos SQLite válida.")
         return None, None, None
         
