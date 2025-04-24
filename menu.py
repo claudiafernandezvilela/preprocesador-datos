@@ -3,6 +3,7 @@ from cargar_datos import cargar_datos
 from seleccion_columnas import seleccionar_columnas
 from manejo_valores_faltantes import manejo_valores_faltantes
 from transformar_datos_categoricos import transformar_datos_categoricos
+from normalizado_escalado import normalizar_escalar_datos
 
 def simbolo(paso_requerido, paso_actual):
     if paso_actual < paso_requerido:
@@ -117,8 +118,10 @@ def main():
                     datos = datos_procesados  # Actualizar los datos con los procesados
                     paso = 2.4
             elif opcion == "2.4" and paso >= 2.4:
-                print("Normalizando datos...")
-                paso = 2.5
+                datos_procesados, estado = normalizar_escalar_datos(datos, features, target)
+                if estado:
+                    datos = datos_procesados  # Actualizar los datos con los procesados
+                    paso = 2.5
             elif opcion == "2.5" and paso >= 2.5:
                 print("Detectando valores atípicos...")
                 paso = 3
