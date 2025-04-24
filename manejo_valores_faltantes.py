@@ -68,7 +68,6 @@ def manejo_valores_faltantes(datos, features, target):
                 if pd.api.types.is_numeric_dtype(datos_procesados[columna]):
                     media = datos_procesados[columna].mean()
                     datos_procesados[columna] = datos_procesados[columna].fillna(media)
-                    print(f"Valores faltantes en '{columna}' rellenados con la media: {media:.4f}")
                 else:
                     print(f"La columna '{columna}' no es numérica. No se pueden rellenar con la media.")
             print("\nValores faltantes rellenados con la media de cada columna numérica.")
@@ -78,7 +77,6 @@ def manejo_valores_faltantes(datos, features, target):
                 if pd.api.types.is_numeric_dtype(datos_procesados[columna]):
                     mediana = datos_procesados[columna].median()
                     datos_procesados[columna] = datos_procesados[columna].fillna(mediana)
-                    print(f"Valores faltantes en '{columna}' rellenados con la mediana: {mediana:.4f}")
                 else:
                     print(f"La columna '{columna}' no es numérica. No se pueden rellenar con la mediana.")
             print("\nValores faltantes rellenados con la mediana de cada columna numérica.")
@@ -87,7 +85,6 @@ def manejo_valores_faltantes(datos, features, target):
             for columna in columnas_seleccionadas:
                 moda = datos_procesados[columna].mode()[0]  # La moda puede ser múltiple, tomamos la primera
                 datos_procesados[columna] = datos_procesados[columna].fillna(moda)
-                print(f"Valores faltantes en '{columna}' rellenados con la moda: {moda}")
             print("\nValores faltantes rellenados con la moda de cada columna.")
 
         elif opcion == "5":
@@ -95,7 +92,6 @@ def manejo_valores_faltantes(datos, features, target):
                 valor_constante = float(input("Seleccione un valor numérico para reemplazar los valores faltantes: "))
                 for columna in columnas_seleccionadas:
                     datos_procesados[columna] = datos_procesados[columna].fillna(valor_constante)
-                    print(f"Valores faltantes en '{columna}' rellenados con el valor {valor_constante}")
                 print("\nValores faltantes rellenados con el valor constante.")
             except ValueError:
                 print("Error: Debe ingresar un valor numérico válido.")
