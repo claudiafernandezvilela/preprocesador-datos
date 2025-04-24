@@ -74,14 +74,7 @@ def seleccionar_columnas(datos):
 
     return features, target, True
 
-def mostrar_seleccion_actual(features, target):
-    if features and target:
-        print("\nSelección actual:")
-        print(f"Features: {', '.join(features)}")
-        print(f"Target: {target}")
-    
-    else:
-        print("\nNo hay selección de columnas realizada. ")
+
 
 
 
