@@ -2,6 +2,7 @@ import os
 from cargar_datos import cargar_datos  
 from seleccion_columnas import seleccionar_columnas
 from manejo_valores_faltantes import manejo_valores_faltantes
+from transformar_datos_categoricos import transformar_datos_categoricos
 
 def simbolo(paso_requerido, paso_actual):
     if paso_actual < paso_requerido:
@@ -111,8 +112,10 @@ def main():
                     datos = datos_procesados  # Actualizar los datos con los procesados
                     paso = 2.3
             elif opcion == "2.3" and paso >= 2.3:
-                print("Transformando datos categóricos...")
-                paso = 2.4
+                datos_procesados, estado = transformar_datos_categoricos(datos, features, target)
+                if estado:
+                    datos = datos_procesados  # Actualizar los datos con los procesados
+                    paso = 2.4
             elif opcion == "2.4" and paso >= 2.4:
                 print("Normalizando datos...")
                 paso = 2.5
