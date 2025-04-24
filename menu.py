@@ -1,6 +1,7 @@
 import os
 from cargar_datos import cargar_datos  
-from seleccion_columnas import seleccionar_columnas, mostrar_seleccion_actual
+from seleccion_columnas import seleccionar_columnas
+from manejo_valores_faltantes import manejo_valores_faltantes
 
 def simbolo(paso_requerido, paso_actual):
     if paso_actual < paso_requerido:
@@ -10,7 +11,7 @@ def simbolo(paso_requerido, paso_actual):
     else:
         return '✓'
 
-def mostrar_menu(paso, ruta=None, tipo_archivo=None, features=None, target=None):
+def mostrar_menu(paso, ruta=None, tipo_archivo=None):
     """
     Muestra el menú principal con el estado de cada opción según el paso actual.
     """
@@ -80,7 +81,7 @@ def main():
     target = None
     
     while True:
-        opcion = mostrar_menu(paso, ruta, tipo_archivo, features, target)
+        opcion = mostrar_menu(paso, ruta, tipo_archivo)
         
         if opcion == "1":
             # Cargar datos usando la función importada del módulo cargar_datos
@@ -90,47 +91,13 @@ def main():
                 # Resetear selección de columnas si se cargan nuevos datos
                 features = None
                 target = None
+  
         elif opcion == "2" and paso >= 2:
-            # Menú de preprocesado
-            print("\n===================================")
-            print("         Preprocesado de Datos    ")
-            print("===================================")
-            print("Seleccione una opción de preprocesado:")
-            print("  [1] Selección de columnas")
-            if paso >= 2.2:
-                print("  [2] Manejo de valores faltantes")
-            if paso >= 2.3:
-                print("  [3] Transformación de datos categóricos")
-            if paso >= 2.4:
-                print("  [4] Normalización y escalado")
-            if paso >= 2.5:
-                print("  [5] Detección y manejo de valores atípicos")
-            print("  [0] Volver al menú principal")
-            
-            subopcion = input("\nSeleccione una opción: ")
-            
-            if subopcion == "1":
-                # Selección de columnas
-                features, target, estado = seleccionar_columnas(datos)
-                if estado and features is not None and target is not None:
-                    paso = 2.2  # Avanzar al siguiente paso
-            elif subopcion == "2" and paso >= 2.2:
-                print("Manejando valores faltantes...")
-                paso = 2.3
-            elif subopcion == "3" and paso >= 2.3:
-                print("Transformando datos categóricos...")
-                paso = 2.4
-            elif subopcion == "4" and paso >= 2.4:
-                print("Normalizando datos...")
-                paso = 2.5
-            elif subopcion == "5" and paso >= 2.5:
-                print("Detectando valores atípicos...")
-                paso = 3
-            elif subopcion == "0":
-                # Volver al menú principal
-                continue
-            else:
-                print("Opción no válida o no disponible en este momento.")
+            # Aquí entraría el código de preprocesado
+            print("Iniciando preprocesado de datos...")
+            paso = 2.1
+            continue
+      
         elif opcion.startswith("2.") and paso >= 2:
             # Opciones directas de preprocesado
             if opcion == "2.1" and paso >= 2:
@@ -139,8 +106,10 @@ def main():
                 if estado and features is not None and target is not None:
                     paso = 2.2  # Avanzar al siguiente paso
             elif opcion == "2.2" and paso >= 2.2:
-                print("Manejando valores faltantes...")
-                paso = 2.3
+                datos_procesados, estado = manejo_valores_faltantes(datos, features, target)
+                if estado:
+                    datos = datos_procesados  # Actualizar los datos con los procesados
+                    paso = 2.3
             elif opcion == "2.3" and paso >= 2.3:
                 print("Transformando datos categóricos...")
                 paso = 2.4
@@ -150,6 +119,7 @@ def main():
             elif opcion == "2.5" and paso >= 2.5:
                 print("Detectando valores atípicos...")
                 paso = 3
+                    
         elif opcion == "3" and paso >= 3:
             print("Visualizando datos...")
             paso = 4
