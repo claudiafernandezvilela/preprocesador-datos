@@ -5,6 +5,7 @@ from manejo_valores_faltantes import manejo_valores_faltantes
 from transformar_datos_categoricos import transformar_datos_categoricos
 from normalizado_escalado import normalizar_escalar_datos
 from detectar_valores_atipicos import detectar_valores_atipicos
+from visualizacion_datos import visualizar_datos
 
 def simbolo(paso_requerido, paso_actual):
     if paso_actual < paso_requerido:
@@ -130,8 +131,11 @@ def main():
                     paso = 3
                     
         elif opcion == "3" and paso >= 3:
-            print("Visualizando datos...")
-            paso = 4
+            estado_visualizacion = visualizar_datos(datos, features, target)
+            if estado_visualizacion:
+                paso = 4
+            else:
+                print("No se pudo completar la visualización de datos.")
         elif opcion == "4" and paso >= 4:
             print("Exportando datos...")
             paso = 5
