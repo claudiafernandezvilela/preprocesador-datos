@@ -6,6 +6,7 @@ from transformar_datos_categoricos import transformar_datos_categoricos
 from normalizado_escalado import normalizar_escalar_datos
 from detectar_valores_atipicos import detectar_valores_atipicos
 from visualizacion_datos import visualizar_datos
+from exportar_datos import exportar_datos
 
 def simbolo(paso_requerido, paso_actual):
     if paso_actual < paso_requerido:
@@ -137,8 +138,11 @@ def main():
             else:
                 print("No se pudo completar la visualización de datos.")
         elif opcion == "4" and paso >= 4:
-            print("Exportando datos...")
-            paso = 5
+            estado_exportacion = exportar_datos(datos, features, target)
+            if estado_exportacion:
+                paso = 5
+            else:
+                print("No se pudo completar la exportación de datos.")
         elif opcion == "5":
             if mostrar_dialogo_salir():
                 break
