@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 from cargar_datos import cargar_datos  
 from seleccion_columnas import seleccionar_columnas
