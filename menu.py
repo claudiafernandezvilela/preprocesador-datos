@@ -52,7 +52,7 @@ def mostrar_menu(paso, ruta=None, tipo_archivo=None):
     
     print(f"[{simbolo(3, paso)}] 3. Visualización de datos ({'pendiente' if paso == 3 else 'requiere preprocesado completo' if paso < 3 else 'completado'})")
     print(f"[{simbolo(4, paso)}] 4. Exportar datos ({'pendiente' if paso == 4 else 'requiere visualización de datos' if paso < 4 else 'completado'})")
-    print(f"[{simbolo(5, paso)}] 5. Salir ")
+    print(f"[{simbolo(5, paso) if paso > 4 else '✓' }] 5. Salir ")
     
     return input("\nSeleccione una opción: ")
 
