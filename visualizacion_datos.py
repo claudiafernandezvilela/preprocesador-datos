@@ -95,5 +95,6 @@ def visualizar_datos(datos, features, target):
     
     else:
         print("Opción inválida.")
+        return False
     
     return True
