@@ -69,22 +69,22 @@ def cargar_excel():
         return None, None, None
         
     # Si hay múltiples hojas, permitir seleccionar
-    xls = pd.ExcelFile(ruta)
-    if len(xls.sheet_names) > 1:
-        print("Hojas disponibles:")
-        for i, hoja in enumerate(xls.sheet_names, 1):
-            print(f"  [{i}] {hoja}")
-        opcion_hoja = input("Seleccione una hoja: ")
-        try:
-            indice = int(opcion_hoja) - 1
-            if indice < 0 or indice >= len(xls.sheet_names):
-                raise ValueError
-            hoja = xls.sheet_names[indice]
-        except ValueError:
-            print("Selección no válida. Usando la primera hoja.")
+    with pd.ExcelFile(ruta) as xls:
+        if len(xls.sheet_names) > 1:
+            print("Hojas disponibles:")
+            for i, hoja in enumerate(xls.sheet_names, 1):
+                print(f"  [{i}] {hoja}")
+            opcion_hoja = input("Seleccione una hoja: ")
+            try:
+                indice = int(opcion_hoja) - 1
+                if indice < 0 or indice >= len(xls.sheet_names):
+                    raise ValueError
+                hoja = xls.sheet_names[indice]
+            except ValueError:
+                print("Selección no válida. Usando la primera hoja.")
+                hoja = xls.sheet_names[0]
+        else:
             hoja = xls.sheet_names[0]
-    else:
-        hoja = xls.sheet_names[0]
         
     # Cargar datos de la hoja seleccionada
     datos = pd.read_excel(ruta, sheet_name=hoja)
