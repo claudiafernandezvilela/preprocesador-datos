@@ -16,7 +16,7 @@ def transformar_datos_categoricos(datos, features, target):
     # Comprobar si hay columnas categóricas en las columnas seleccionadas
     columnas_categoricas = []
     for columna in columnas_seleccionadas:
-        if pd.api.types.is_object_dtype(datos_procesados[columna]) or pd.api.types.is_categorical_dtype(datos_procesados[columna]):
+        if pd.api.types.is_object_dtype(datos_procesados[columna]) or isinstance(datos_procesados[columna].dtype, pd.CategoricalDtype):
             columnas_categoricas.append(columna)
 
     # Si no hay columnas categóricas, informamos al usuario y no hacemos nada
@@ -56,8 +56,8 @@ def transformar_datos_categoricos(datos, features, target):
                 dummies = pd.get_dummies(datos_procesados[columna], prefix=columna, drop_first=False)
                 # Concatenar las nuevas columnas al DataFrame original
                 datos_procesados = pd.concat([datos_procesados, dummies], axis=1)
-                # Eliminar la columna original
-                datos_procesados.drop(columna, axis=1)
+                # Eliminar la columna original - Fix this line:
+                datos_procesados = datos_procesados.drop(columna, axis=1)
 
             print("\nTransformación completada con One-Hot Encoding.")
 
@@ -80,8 +80,8 @@ def transformar_datos_categoricos(datos, features, target):
                     if pd.notna(valor):
                         nuevo_valores.iloc[i] = mapeo[valor]
                 
-                # Actualizar la columna en el DataFrame
-                datos_procesados[columna] = nuevo_valores
+                # Actualizar la columna en el DataFrame y asegurar que sea de tipo numérico
+                datos_procesados[columna] = pd.to_numeric(nuevo_valores)
 
             print("\nTransformación completada con Label Encoding.")
         
