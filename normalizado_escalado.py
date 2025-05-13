@@ -56,8 +56,8 @@ def normalizar_escalar_datos(datos, features, target):
                 if min_val == max_val:
                     datos_procesados[columna] = 0  # Si todos los valores son iguales, se normalizan a 0
                     print(f"Columna '{columna}': Todos los valores son iguales ({min_val}). Normalizados a 0.")
-                #else:
-                #    datos_procesados[columna] = (datos_procesados[columna] - min_val) / (max_val - min_val)
+                else:
+                    datos_procesados[columna] = (datos_procesados[columna] - min_val) / (max_val - min_val)
                 #    print(f"Columna '{columna}': Normalizada con Min-Max Scaling (min={min_val:.4f}, max={max_val:.4f})")
             
             print("\nNormalización completada con Min-Max Scaling.")
@@ -71,8 +71,8 @@ def normalizar_escalar_datos(datos, features, target):
                 if desv == 0:
                     datos_procesados[columna] = 0
                     print(f"Columna '{columna}': No hay variación (std=0). Todos normalizados a 0.")
-                #else:
-                #    datos_procesados[columna] = (datos_procesados[columna] - media) / desv
+                else:
+                    datos_procesados[columna] = (datos_procesados[columna] - media) / desv
                 #    print(f"Columna '{columna}': Normalizada con Z-score (media={media:.4f}, std={desv:.4f})")
             
             print("\nNormalización completada con Z-score Normalization.")

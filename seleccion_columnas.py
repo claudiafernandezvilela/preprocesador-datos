@@ -10,32 +10,32 @@ def seleccionar_columnas(datos):
     print("Columnas disponibles en los datos:  ")
     for i, columna in enumerate(datos.columns, 1):
         print(f"  [{i}] {columna}")
-    
+
     # Selección de las columnas de entrada (features)
     while True:
         try:
             entrada_features = input("\nIngrese los números de las columnas de entrada (features), separados por comas:")
-
-            # Comprobar si el usuario quiere volver al menú principal
+            
+            # Comprobar si el usuario quiere cancelar
             if entrada_features == str(len(datos.columns) + 1):
                 print("Operación cancelada.")
                 return None, None, False
             
             # Convertir la entrada a una lista de índices
             indices_features = [int(idx.strip()) for idx in entrada_features.split(",")]
-
-            # Validar los índices
+            
+            # Validar los índices - si hay algún índice inválido, pedir nuevamente
             if any(idx <= 0 or idx > len(datos.columns) for idx in indices_features):
                 print("Error: Uno o más índices fuera de rango.")
                 continue
-
+                
             # Obtener los nombres de las columnas
             features = [datos.columns[idx - 1] for idx in indices_features]
             break
-
+            
         except ValueError:
             print("Error: Ingrese números válidos separados por comas.")
-
+    
     # Selección de la columna de salida (target)
     while True:
         try:
