@@ -4,7 +4,7 @@ from tabulate import tabulate
 
 def transformar_datos_categoricos(datos, features, target):
     print("\n===================================")
-    print("         Transformación de Datos Categóricos")
+    print(" Transformación de Datos Categóricos")
     print("===================================")
 
     # Creamos una copia del dataset para no modificar el original

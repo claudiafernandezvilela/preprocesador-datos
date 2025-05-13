@@ -4,7 +4,7 @@ from tabulate import tabulate
 
 def manejo_valores_faltantes(datos, features, target):
     print("\n===================================")
-    print("         Manejo de Valores Faltantes")
+    print("   Manejo de Valores Faltantes")
     print("===================================")
 
     # Creamos una copia del dataset para no modificar el original

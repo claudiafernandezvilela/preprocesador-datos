@@ -10,9 +10,14 @@ def normalizar_escalar_datos(datos, features, target):
     # Creamos una copia del dataset para no modificar el original
     datos_procesados = datos.copy(deep=True)
 
-    # Identificar las colunmnas númericas entre las columnas de entrada seleccionadas
+    # Identificar las columnas numéricas entre las columnas de entrada seleccionadas
     columnas_numericas = []
-    for columna in features:
+    
+    # Si se ha realizado One-Hot Encoding en 'Name', ya no estará presente
+    # en el DataFrame original, sino que serán las columnas generadas por el encoding.
+    columnas_que_existen = [columna for columna in features if columna in datos_procesados.columns]
+    
+    for columna in columnas_que_existen:
         if pd.api.types.is_numeric_dtype(datos_procesados[columna]):
             columnas_numericas.append(columna)
 
