@@ -9,12 +9,12 @@ def visualizar_datos(datos, features, target):
     Implementa la funcionalidad de visualización de datos.
     
     Args:
-        datos: DataFrame con los datos procesados
-        features: Lista de nombres de columnas que son variables de entrada
-        target: Nombre de la columna objetivo
+        datos: DataFrame con los datos procesados.
+        features: Lista de nombres de columnas que son variables de entrada.
+        target: Nombre de la columna objetivo.
     
     Returns:
-        bool: True si se completó la visualización, False en caso contrario
+        bool: True si se completó la visualización, False en caso contrario.
     """
     print("\n=============================")
     print("Visualización de Datos")
@@ -32,6 +32,7 @@ def visualizar_datos(datos, features, target):
         print("No se encontraron columnas seleccionadas en los datos.")
         return False
     
+    # Mostrar las opciones de visualización disponibles
     print("\nSeleccione qué tipo de visualización desea generar:")
     print("  [1] Resumen estadístico de las variables seleccionadas")
     print("  [2] Histogramas de variables numéricas")
@@ -40,21 +41,23 @@ def visualizar_datos(datos, features, target):
     print("  [5] Volver al menú principal")
     
     try:
+        # Leer la opción seleccionada por el usuario
         opcion = int(input("\nSeleccione una opción: "))
     except ValueError:
+        # Manejar errores si el usuario ingresa un valor no numérico
         print("Opción inválida.")
         return False
     
-    if opcion == 1:  # Resumen estadísticos
+    if opcion == 1:  # Resumen estadístico
         print("\nResumen estadístico de las variables seleccionadas:")
         print("-------------------------------------------------------------------")
         print("Variable      | Media | Mediana | Desviación Est. | Mínimo | Máximo")
         print("-------------------------------------------------------------------")
         
-        # Obtener estadísticas
-        estadisticas = datos[columnas].describe().T  # Transpone para tener variables en filas
+        # Obtener estadísticas descriptivas de las columnas seleccionadas
+        estadisticas = datos[columnas].describe().T  # Transponer para tener variables en filas
         
-        # Imprimir cada fila
+        # Imprimir estadísticas para cada variable
         for variable in estadisticas.index:
             media = round(estadisticas.loc[variable, 'mean'], 1)
             mediana = round(estadisticas.loc[variable, '50%'], 0)
@@ -75,7 +78,9 @@ def visualizar_datos(datos, features, target):
         for columna in columnas:
             if pd.api.types.is_numeric_dtype(datos[columna]):
                 plt.figure(figsize=(6, 4))
+                # Graficar los valores originales
                 plt.scatter(range(len(datos)), datos[columna], label=f"{columna} (original)", alpha=0.5)
+                # Graficar los valores normalizados
                 plt.scatter(range(len(datos)), MinMaxScaler().fit_transform(datos[[columna]]), 
                            label=f"{columna} (normalizado)", alpha=0.5)
                 plt.legend()
@@ -86,6 +91,7 @@ def visualizar_datos(datos, features, target):
         # Filtrar solo columnas numéricas
         cols_numericas = [col for col in columnas if pd.api.types.is_numeric_dtype(datos[col])]
         plt.figure(figsize=(10, 6))
+        # Generar el heatmap de correlación
         sns.heatmap(datos[cols_numericas].corr(), annot=True, cmap="coolwarm", fmt=".2f")
         plt.title("Heatmap de correlación de variables numéricas")
         plt.show()
@@ -94,6 +100,7 @@ def visualizar_datos(datos, features, target):
         return True
     
     else:
+        # Manejar opciones inválidas
         print("Opción inválida.")
         return False
     

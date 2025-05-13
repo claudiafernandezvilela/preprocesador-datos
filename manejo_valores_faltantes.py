@@ -3,15 +3,27 @@ import numpy as np
 from tabulate import tabulate
 
 def manejo_valores_faltantes(datos, features, target):
+    """
+    Maneja los valores faltantes en un conjunto de datos aplicando diferentes estrategias.
+    
+    Args:
+        datos (DataFrame): Dataset original.
+        features (list): Lista de columnas de entrada a analizar.
+        target (str): Nombre de la columna objetivo (target).
+    
+    Returns:
+        tuple: (datos_procesados, bool) donde:
+            - datos_procesados: DataFrame con los datos procesados.
+            - bool: True si se procesaron los datos correctamente, False en caso contrario.
+    """
     print("\n===================================")
     print("   Manejo de Valores Faltantes")
     print("===================================")
 
-    # Creamos una copia del dataset para no modificar el original
-
+    # Crear una copia del dataset para no modificar el original
     datos_procesados = datos.copy(deep=True)
 
-    # Obtenemos todas las columnas seleccionadas
+    # Obtenemos todas las columnas seleccionadas (features + target)
     columnas_seleccionadas = features + [target]
 
     # Comprobar si hay valores faltantes en las columnas seleccionadas
@@ -19,15 +31,16 @@ def manejo_valores_faltantes(datos, features, target):
     hay_val_faltantes = False
 
     for columna in columnas_seleccionadas:
+        # Contar valores nulos en cada columna
         nulos = datos_procesados[columna].isna().sum()
         if nulos > 0:
             valores_faltantes[columna] = nulos
             hay_val_faltantes = True
 
-    # Si no hay valores faltantes, informamos al usuario y no hacemos nada
+    # Si no hay valores faltantes, informar al usuario y salir
     if not hay_val_faltantes:
         print("No se han detectado valores faltantes en las columnas seleccionadas.")
-        print("No es necesario aplicar ninguna estrategia. ")
+        print("No es necesario aplicar ninguna estrategia.")
         return datos_procesados, True
     
     # Mostrar los valores faltantes encontrados
@@ -36,7 +49,7 @@ def manejo_valores_faltantes(datos, features, target):
         print(f"  - {columna}: {cantidad} valores faltantes")
 
     # Menú para manejar los valores faltantes
-    print("\nSelecciones una estrategia para manejar los valores faltantes:")
+    print("\nSeleccione una estrategia para manejar los valores faltantes:")
     print("  [1] Eliminar filas con valores faltantes")
     print("  [2] Rellenar con la media de la columna")
     print("  [3] Rellenar con la mediana de la columna")
@@ -44,13 +57,15 @@ def manejo_valores_faltantes(datos, features, target):
     print("  [5] Rellenar con un valor constante")
     print("  [6] Volver al menú principal")
 
+    # Leer la opción seleccionada por el usuario
     opcion = input("Seleccione una opción: ")
 
+    # Si el usuario elige volver al menú principal
     if opcion == "6":
         print("Operación cancelada.")
         return datos, False
     
-    # Validar opción
+    # Validar que la opción seleccionada sea válida
     if opcion not in ["1", "2", "3", "4", "5"]:
         print("Opción no válida.")
         return datos, False
@@ -58,12 +73,14 @@ def manejo_valores_faltantes(datos, features, target):
     try:
         # Aplicar la estrategia elegida
         if opcion == "1":
+            # Eliminar filas con valores faltantes
             filas_iniciales = len(datos_procesados)
             datos_procesados = datos_procesados.dropna(subset=columnas_seleccionadas)
             filas_finales = len(datos_procesados)
             print(f"\nSe han eliminado {filas_iniciales - filas_finales} filas con valores faltantes.")
         
         elif opcion == "2":
+            # Rellenar valores faltantes con la media de cada columna numérica
             for columna in columnas_seleccionadas:
                 if pd.api.types.is_numeric_dtype(datos_procesados[columna]):
                     media = datos_procesados[columna].mean()
@@ -73,6 +90,7 @@ def manejo_valores_faltantes(datos, features, target):
             print("\nValores faltantes rellenados con la media de cada columna numérica.")
         
         elif opcion == "3":
+            # Rellenar valores faltantes con la mediana de cada columna numérica
             for columna in columnas_seleccionadas:
                 if pd.api.types.is_numeric_dtype(datos_procesados[columna]):
                     mediana = datos_procesados[columna].median()
@@ -82,12 +100,14 @@ def manejo_valores_faltantes(datos, features, target):
             print("\nValores faltantes rellenados con la mediana de cada columna numérica.")
         
         elif opcion == "4":
+            # Rellenar valores faltantes con la moda de cada columna
             for columna in columnas_seleccionadas:
                 moda = datos_procesados[columna].mode()[0]  # La moda puede ser múltiple, tomamos la primera
                 datos_procesados[columna] = datos_procesados[columna].fillna(moda)
             print("\nValores faltantes rellenados con la moda de cada columna.")
 
         elif opcion == "5":
+            # Rellenar valores faltantes con un valor constante proporcionado por el usuario
             try:
                 valor_constante = float(input("Seleccione un valor numérico para reemplazar los valores faltantes: "))
                 for columna in columnas_seleccionadas:
@@ -96,14 +116,11 @@ def manejo_valores_faltantes(datos, features, target):
             except ValueError:
                 print("Error: Debe ingresar un valor numérico válido.")
                 return datos, False
-        
 
-        return datos_procesados, True
-            
+        return datos_procesados, True  # Retornar el DataFrame procesado y éxito
+        
     except Exception as e:
+        # Manejar errores durante el procesamiento
         print(f"Error al manejar los valores faltantes: {e}")
         return datos, False
-
-    return datos, False
-    
 

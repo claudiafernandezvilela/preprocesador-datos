@@ -20,6 +20,10 @@ from visualizacion_datos import visualizar_datos
 from exportar_datos import exportar_datos
 
 class BaseTestCase(unittest.TestCase):
+    """
+    Clase base para pruebas que inicializa un DataFrame de ejemplo (Titanic) 
+    y define atributos comunes como features y target.
+    """
     def setUp(self):
         self.datos_prueba = pd.DataFrame({
             'PassengerId': [1, 2, 3, 4, 5],
@@ -41,6 +45,10 @@ class BaseTestCase(unittest.TestCase):
 
 @contextmanager
 def capturar_salida():
+    """
+    Context manager que redirige stdout para capturar la salida de impresión en consola.
+    Útil para verificar mensajes en funciones que imprimen resultados directamente.
+    """
     nuevo_stdout = io.StringIO()
     viejo_stdout = sys.stdout
     try:
@@ -51,12 +59,17 @@ def capturar_salida():
 
 class TestCargarDatos(BaseTestCase):
     """
-    Clase para probar las funciones del módulo cargar_datos.py
+    Pruebas para el módulo cargar_datos.py.
+
+    Incluye validaciones para:
+    - Archivos CSV, Excel y SQLite existentes e inexistentes.
+    - Opción de volver al menú.
+    - Manejo de entradas inválidas.
     """
-    
     def setUp(self):
         """
-        Configuración previa para las pruebas.
+        Crea archivos temporales (CSV, Excel, SQLite) a partir del DataFrame de prueba
+        para utilizarlos en las pruebas de carga de datos.
         """
         super().setUp()
         
@@ -76,7 +89,7 @@ class TestCargarDatos(BaseTestCase):
     
     def tearDown(self):
         """
-        Limpieza después de las pruebas.
+        Elimina los archivos temporales creados durante las pruebas de carga de datos.
         """
         # Eliminar archivos temporales
         if os.path.exists(self.ruta_csv):
@@ -188,9 +201,19 @@ class TestCargarDatos(BaseTestCase):
             self.assertIn("Tipos de datos", contenido)
 
 class TestExportarDatos(BaseTestCase):
-    """Clase para probar la funcionalidad de exportación de datos."""
+    """
+    Pruebas para el módulo exportar_datos.py.
+
+    Verifica:
+    - Exportación a CSV y Excel.
+    - Manejo de datos vacíos.
+    - Nombres inválidos o entradas incorrectas del usuario.
+    """
+
     def setUp(self):
-        """Prepara los datos de prueba antes de cada test."""
+        """
+        Inicializa el DataFrame de prueba para las pruebas de exportación.
+        """
         super().setUp()
     
     @patch('builtins.print')
@@ -227,13 +250,25 @@ class TestExportarDatos(BaseTestCase):
         self.assertFalse(exportar_datos(self.datos_prueba, self.features, self.target))
 
 class TestVisualizacionDatos(BaseTestCase):
-    """Clase para probar la funcionalidad de visualización de datos."""
+    """
+    Pruebas para el módulo visualizacion_datos.py.
+
+    Evalúa:
+    - Visualizaciones estadísticas y gráficas.
+    - Manejo de entradas inválidas.
+    - Comportamiento ante datos o columnas inexistentes.
+    """
     
     def setUp(self):
+        """
+        Inicializa el DataFrame de prueba para las pruebas de visualización.
+        """
         super().setUp()
     
     def tearDown(self):
-        """Limpia después de cada test."""
+        """
+        Cierra todas las figuras abiertas de matplotlib después de cada prueba.
+        """
         plt.close('all')  # Cerrar todas las figuras de matplotlib
     
     def test_datos_nulos(self):
