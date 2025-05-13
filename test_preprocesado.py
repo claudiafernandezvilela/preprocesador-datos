@@ -149,8 +149,7 @@ class TestPreprocesado(unittest.TestCase):
         with patch('builtins.print') as mock_print:
             datos_procesados, success = detectar_valores_atipicos(datos_sin_atipicos, ['Pclass'], self.target)
         
-        # Para la columna Pclass no deberían detectarse valores atípicos
-        mock_print.assert_any_call("No se han detectado valores atípicos en las columnas numéricas seleccionadas.")
+        mock_print.assert_any_call("No se han detectado valores atípicos en las columnas seleccionadas.")
         self.assertTrue(success)
     
     def test_detectar_valores_atipicos_con_atipicos(self):
