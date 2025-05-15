@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 import os
 from cargar_datos import cargar_datos  
-from seleccion_columnas import seleccionar_columnas
-from manejo_valores_faltantes import manejo_valores_faltantes
-from transformar_datos_categoricos import transformar_datos_categoricos
-from normalizado_escalado import normalizar_escalar_datos
-from detectar_valores_atipicos import detectar_valores_atipicos
 from visualizacion_datos import visualizar_datos
 from exportar_datos import exportar_datos
+from preprocesado import seleccionar_columnas, manejo_valores_faltantes, transformar_datos_categoricos, normalizar_escalar_datos, detectar_valores_atipicos
 
 def simbolo(paso_requerido, paso_actual):
     """

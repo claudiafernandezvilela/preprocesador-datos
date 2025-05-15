@@ -10,11 +10,7 @@ import io
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Importación de los módulos a probar
-from seleccion_columnas import seleccionar_columnas
-from manejo_valores_faltantes import manejo_valores_faltantes
-from detectar_valores_atipicos import detectar_valores_atipicos
-from normalizado_escalado import normalizar_escalar_datos
-from transformar_datos_categoricos import transformar_datos_categoricos
+from preprocesado import seleccionar_columnas, manejo_valores_faltantes, detectar_valores_atipicos, normalizar_escalar_datos, transformar_datos_categoricos
 
 class TestPreprocesado(unittest.TestCase):
     """
