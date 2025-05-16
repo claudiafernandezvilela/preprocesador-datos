@@ -35,7 +35,7 @@ Esta aplicación implementa un pipeline completo de preprocesamiento de datos co
 
 1. Clonar este repositorio:
    ```
-   git clone https://github.com/tu-usuario/pipeline-preprocesamiento.git
+   git clone https://github.com/claudiafernandezvilela/preprocesador-datos.git
    cd pipeline-preprocesamiento
    ```
 
